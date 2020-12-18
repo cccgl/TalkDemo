@@ -1,46 +1,29 @@
 package com.lei;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
-public class ServeDemo02 {
+public class ServeDemo02
+{
+    public static void main(String[] args) throws Exception {
+        ServerSocket serverSocket=new ServerSocket(9000);
+        //监听客户端连接 会一直监听客户端是否连接
+        Socket socket=serverSocket.accept();
 
-
-    public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket=null;
-        Socket socket=null;
-        InputStream is=null;
-        ByteArrayOutputStream baos=null;
-        int port=9999;
-        try {
-            //该类实现了将数据写入字节数组的输出流
-            baos=new ByteArrayOutputStream();
-            //类实现了服务器套接字。 服务器套接字等待通过网络进入的请求。 它根据该请求执行一些操作，然后可能将结果返回给请求者
-            serverSocket=new ServerSocket(9999);
-            //侦听要连接到此套接字并接受它。   侦听到了我们在服务端定义的socket
-            socket=serverSocket.accept();
-            //输出流
-            is=socket.getInputStream();
-            byte[] buffer=new byte[1024];
-            int len;
-            while((len=is.read(buffer))!=-1){
-                baos.write(buffer,0,len);
-            }
-            System.out.println(baos.toString());
-        }
-        catch (Exception e)
+        InputStream is=socket.getInputStream();
+        FileOutputStream fos=new FileOutputStream(new File("recerve.png"));
+        byte[] buffer=new byte[1024];
+        int len;
+        while((len=is.read(buffer))!=-1)
         {
-            e.printStackTrace();
+            fos.write(buffer,0,len);
         }
-        finally {
-            //关闭资源 从下到上
-            baos.close();
-            is.close();
-            socket.close();
-            serverSocket.close();
-        }
+        fos.close();
+        is.close();
+        socket.close();
+        serverSocket.close();
     }
 }
