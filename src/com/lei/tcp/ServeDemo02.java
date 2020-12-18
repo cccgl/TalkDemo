@@ -1,4 +1,4 @@
-package com.lei;
+package com.lei.tcp;
 
 import java.io.*;
 import java.net.InetAddress;
